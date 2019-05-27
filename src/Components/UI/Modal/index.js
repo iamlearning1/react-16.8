@@ -1,4 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styles from './index.module.css';
 
-export default props => <div className={styles.Modal}>{props.children}</div>;
+import Backdrop from '../Backdrop';
+
+export default props => (
+  <Fragment>
+    <Backdrop show={props.show} clicked={props.modalClosed}>
+      <div
+        className={styles.Modal}
+        style={{
+          transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+          opacity: props.show ? '1' : '0'
+        }}
+      >
+        {props.children}
+      </div>
+    </Backdrop>
+  </Fragment>
+);

@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 
-import Burger from '../../Components/Burger';
-import BuildControls from '../../Components/Burger/BuildControls';
-import OrderSummary from '../../Components/Burger/OrderSummary';
-import Modal from '../../Components/UI/Modal';
+import Burger from 'Components/Burger';
+import BuildControls from 'Components/Burger/BuildControls';
+import OrderSummary from 'Components/Burger/OrderSummary';
+import Modal from 'Components/UI/Modal';
 
 const INGREDIENT_PRICES = {
   salad: 0.3,
@@ -20,7 +20,8 @@ class BurgerBuilder extends Component {
       meat: 0
     },
     totalPrice: 4,
-    purchasable: false
+    purchasable: false,
+    purchasing: false
   };
 
   updatePurchaseState = ingredients => {
@@ -61,12 +62,31 @@ class BurgerBuilder extends Component {
     this.updatePurchaseState(updatedIngredients);
   };
 
+  purchaseHandler = () => {
+    this.setState({
+      purchasing: true
+    });
+  };
+
+  purchaseCancelHandler = () => {
+    this.setState({ purchasing: false });
+  };
+
+  purchaseContinueHandler = () => {
+    alert('Continue');
+  };
+
   render() {
-    const { ingredients, totalPrice, purchasable } = this.state;
+    const { ingredients, totalPrice, purchasable, purchasing } = this.state;
     return (
       <Fragment>
-        <Modal>
-          <OrderSummary ingredients={ingredients} />
+        <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
+          <OrderSummary
+            ingredients={ingredients}
+            canceled={this.purchaseCancelHandler}
+            continue={this.purchaseContinueHandler}
+            totalPrice={totalPrice}
+          />
         </Modal>
         <Burger ingredients={ingredients} />
         <BuildControls
@@ -74,6 +94,7 @@ class BurgerBuilder extends Component {
           removeIngredient={this.removeIngredientHandler}
           price={totalPrice}
           purchasable={purchasable}
+          ordered={this.purchaseHandler}
         />
       </Fragment>
     );
