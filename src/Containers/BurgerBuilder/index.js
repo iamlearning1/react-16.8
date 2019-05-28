@@ -3,8 +3,8 @@ import React, { Component, Fragment } from 'react';
 import Burger from 'Components/Burger';
 import BuildControls from 'Components/Burger/BuildControls';
 import OrderSummary from 'Components/Burger/OrderSummary';
-import Modal from 'Components/UI/Modal';
 import Spinner from 'Components/UI/Spinner';
+import Modal from 'Components/UI/Modal';
 import withErrorHandler from 'hoc/withErrorHandler';
 
 import axios from 'api';
