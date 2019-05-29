@@ -10,6 +10,35 @@
 
 .Input {
   display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.Touched {
+  border: 1px solid red;
+}
+
+.Input input {
+  font: inherit;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.Input input:focus {
+  outline: none;
+  background: #ccc;
+}
+
+.Input p {
+  color: red;
+  font-size: 14px;
+  padding: 5px 0px 5px 5px;
+  text-align: left;
+  margin: 0;
 }
 
 @media (min-width: 600px) {
