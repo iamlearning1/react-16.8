@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { withFormik, Field, Form } from "formik";
-import { object, string, number } from "yup";
 
 import Button from "Components/UI/Button";
 import Spinner from "Components/UI/Spinner";
@@ -11,7 +9,99 @@ import axios from "api";
 
 class ContactData extends Component {
 	state = {
+		orderForm: {
+			name: {
+				elementType: "input",
+				elementConfig: {
+					type: "text",
+					placeholder: "Your Name"
+				},
+				value: "",
+				validation: {
+					required: true
+				},
+				valid: false
+			},
+			email: {
+				elementType: "input",
+				elementConfig: {
+					type: "text",
+					placeholder: "Your Email"
+				},
+				value: "",
+				validation: {
+					required: true
+				},
+				valid: false
+			},
+			street: {
+				elementType: "input",
+				elementConfig: {
+					type: "text",
+					placeholder: "Street Name"
+				},
+				value: "",
+				validation: {
+					required: true
+				},
+				valid: false
+			},
+			zipCode: {
+				elementType: "input",
+				elementConfig: {
+					type: "text",
+					placeholder: "Zip-Code"
+				},
+				value: "",
+				validation: {
+					required: true,
+					minLength: 5,
+					maxLength: 5
+				},
+				valid: false
+			},
+			country: {
+				elementType: "input",
+				elementConfig: {
+					type: "text",
+					placeholder: "Country"
+				},
+				value: "",
+				validation: {
+					required: true
+				},
+				valid: false
+			},
+			deliveryMethod: {
+				elementType: "select",
+				elementConfig: {
+					options: [
+						{ value: "fastest", displayValue: "Fastest" },
+						{ value: "cheapest", displayValue: "Cheapest" }
+					]
+				},
+				value: ""
+			}
+		},
 		loading: false
+	};
+
+	checkValidation = (value, rules) => {
+		let isValid = true;
+
+		if (rules.required) {
+			isValid = value.trim() !== "" && isValid;
+		}
+
+		if (rules.minLength) {
+			isValid = value.length >= rules.minLength && isValid;
+		}
+
+		if (rules.maxLength) {
+			isValid = value.length <= rules.maxLength && isValid;
+		}
+
+		return isValid;
 	};
 
 	orderHandler = async e => {
@@ -19,10 +109,15 @@ class ContactData extends Component {
 		this.setState({
 			loading: true
 		});
+		const formData = {};
+		for (let i in this.state.orderForm) {
+			formData[i] = this.state.orderForm[i].value;
+		}
 		try {
 			await axios.post("/orders.json", {
 				ingredients: this.props.ingredients,
-				price: parseFloat(this.props.price).toFixed(2)
+				price: parseFloat(this.props.price).toFixed(2),
+				orderData: formData
 			});
 			this.setState({
 				loading: false
@@ -35,156 +130,57 @@ class ContactData extends Component {
 		}
 	};
 
+	inputChangedHandler = (event, inputIdentifier) => {
+		let formData = {
+			...this.state.orderForm
+		};
+		formData[inputIdentifier].value = event.target.value;
+		formData[inputIdentifier].valid = this.checkValidation(
+			event.target.value,
+			formData[inputIdentifier].validation
+		);
+		this.setState({
+			orderForm: formData
+		});
+	};
+
+	contactForm = () => {
+		const formElementsArray = [];
+		const { orderForm } = this.state;
+		for (let key in orderForm) {
+			formElementsArray.push({
+				id: key,
+				config: orderForm[key]
+			});
+		}
+		return formElementsArray.map((element, index) => (
+			<Input
+				elementType={element.config.elementType}
+				value={element.config.value}
+				elementConfig={element.config.elementConfig}
+				changed={event => this.inputChangedHandler(event, element.id)}
+				key={index}
+			/>
+		));
+	};
+
 	render() {
-		const { errors, touched, isSubmitting } = this.props;
 		return (
 			<div className={styles.ContactData}>
 				<h4>Enter your Contact Data</h4>
 				{this.state.loading ? (
 					<Spinner />
 				) : (
-					<Form>
-						<div className={styles.Input}>
-							<Field
-								type="text"
-								name="name"
-								placeholder="Your Name"
-								style={
-									touched.name &&
-									errors.name && {
-										border: "1px solid red"
-									}
-								}
-							/>
-							{touched.name && errors.name && (
-								<p>{errors.name}</p>
-							)}
-						</div>
-						<div className={styles.Input}>
-							<Field
-								type="email"
-								name="email"
-								placeholder="Your Email"
-								style={
-									touched.email &&
-									errors.email && {
-										border: "1px solid red"
-									}
-								}
-							/>
-							{touched.email && errors.email && (
-								<p>{errors.email}</p>
-							)}
-						</div>
-						<div className={styles.Input}>
-							<Field
-								type="text"
-								name="street"
-								placeholder="Street Name"
-								style={
-									touched.street &&
-									errors.street && {
-										border: "1px solid red"
-									}
-								}
-							/>
-							{touched.street && errors.street && (
-								<p>{errors.street}</p>
-							)}
-						</div>
-						<div className={styles.Input}>
-							<Field
-								type="text"
-								name="zipCode"
-								placeholder="Zip Code"
-								style={
-									touched.zipCode &&
-									errors.zipCode && {
-										border: "1px solid red"
-									}
-								}
-							/>
-							{touched.zipCode && errors.zipCode && (
-								<p>{errors.zipCode}</p>
-							)}
-						</div>
-						<div className={styles.Input}>
-							<Field
-								type="text"
-								name="country"
-								placeholder="Country"
-								style={
-									touched.country &&
-									errors.country && {
-										border: "1px solid red"
-									}
-								}
-							/>
-							{touched.country && errors.country && (
-								<p>{errors.country}</p>
-							)}
-						</div>
-						<button
-							style={{
-								color: "#5c9210",
-								fontSize: "16px",
-								fontWeight: "bold",
-								border: "none",
-								background: "none",
-								margin: "10px",
-								padding: "10px"
-							}}
-							disabled={isSubmitting}
-							type="submit"
-						>
+					<form onSubmit={this.orderHandler}>
+						{this.contactForm()}
+						<Button btnType="Success" clicked={this.orderHandler}>
 							ORDER
-						</button>
-						{/* <Button
-              btnType="Success"
-              clicked={this.orderHandler}
-              disabled={isSubmitting}
-            >
-              ORDER
-            </Button> */}
-					</Form>
+						</Button>
+					</form>
 				)}
 			</div>
 		);
 	}
 }
 
-const FormikApp = withFormik({
-	mapPropsToValues() {
-		return {
-			name: "",
-			email: "",
-			street: "",
-			zipCode: "",
-			country: ""
-		};
-	},
-	validationSchema: object().shape({
-		name: string()
-			.min(6)
-			.trim()
-			.required("Name is required"),
-		email: string()
-			.email()
-			.required("Email is required"),
-		street: string()
-			.trim()
-			.required("Street name is required"),
-		zipCode: number()
-			.max(99999, "Zip-Code must be of 5 digits")
-			.required("Zip-Code is required"),
-		country: string()
-			.trim()
-			.required("Country name is required")
-	}),
-	handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-		resetForm();
-		setSubmitting(false);
-	}
-})(ContactData);
-
-export default FormikApp;
+export default ContactData;
