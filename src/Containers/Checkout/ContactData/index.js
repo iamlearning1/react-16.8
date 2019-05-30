@@ -20,7 +20,8 @@ class ContactData extends Component {
 				validation: {
 					required: true
 				},
-				valid: false
+				valid: false,
+				touched: false
 			},
 			email: {
 				elementType: "input",
@@ -32,7 +33,8 @@ class ContactData extends Component {
 				validation: {
 					required: true
 				},
-				valid: false
+				valid: false,
+				touched: false
 			},
 			street: {
 				elementType: "input",
@@ -44,7 +46,8 @@ class ContactData extends Component {
 				validation: {
 					required: true
 				},
-				valid: false
+				valid: false,
+				touched: false
 			},
 			zipCode: {
 				elementType: "input",
@@ -58,7 +61,8 @@ class ContactData extends Component {
 					minLength: 5,
 					maxLength: 5
 				},
-				valid: false
+				valid: false,
+				touched: false
 			},
 			country: {
 				elementType: "input",
@@ -70,7 +74,8 @@ class ContactData extends Component {
 				validation: {
 					required: true
 				},
-				valid: false
+				valid: false,
+				touched: false
 			},
 			deliveryMethod: {
 				elementType: "select",
@@ -80,10 +85,12 @@ class ContactData extends Component {
 						{ value: "cheapest", displayValue: "Cheapest" }
 					]
 				},
-				value: ""
+				value: "fastest",
+				valid: true
 			}
 		},
-		loading: false
+		loading: false,
+		formIsValid: false
 	};
 
 	checkValidation = (value, rules) => {
@@ -139,8 +146,14 @@ class ContactData extends Component {
 			event.target.value,
 			formData[inputIdentifier].validation
 		);
+		formData[inputIdentifier].touched = true;
+		let formIsValid = true;
+		for (let inputIdentifier in formData) {
+			formIsValid = formData[inputIdentifier].valid && formIsValid;
+		}
 		this.setState({
-			orderForm: formData
+			orderForm: formData,
+			formIsValid
 		});
 	};
 
@@ -159,6 +172,9 @@ class ContactData extends Component {
 				value={element.config.value}
 				elementConfig={element.config.elementConfig}
 				changed={event => this.inputChangedHandler(event, element.id)}
+				invalid={!element.config.valid}
+				shouldValidate={element.config.validation}
+				touched={element.config.touched}
 				key={index}
 			/>
 		));
@@ -173,7 +189,11 @@ class ContactData extends Component {
 				) : (
 					<form onSubmit={this.orderHandler}>
 						{this.contactForm()}
-						<Button btnType="Success" clicked={this.orderHandler}>
+						<Button
+							btnType="Success"
+							clicked={this.orderHandler}
+							disabled={!this.state.formIsValid}
+						>
 							ORDER
 						</Button>
 					</form>
