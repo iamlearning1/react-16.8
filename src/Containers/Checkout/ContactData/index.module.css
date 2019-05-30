@@ -1,48 +1,61 @@
 .ContactData {
-	margin: 20px auto;
-	text-align: center;
-	width: 80%;
-	box-shadow: 0 2px 3px #ccc;
-	border: 10x solid #eee;
-	padding: 10px;
-	box-sizing: border-box;
+  margin: 20px auto;
+  text-align: center;
+  width: 80%;
+  box-shadow: 0 2px 3px #ccc;
+  border: 10x solid #eee;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .Input {
-	display: block;
-	width: 100%;
-	box-sizing: border-box;
-	margin-bottom: 16px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
 }
 
 .Touched {
-	border: 1px solid red;
+  border: 1px solid red;
 }
 
 .Input input {
-	font: inherit;
-	padding: 6px 10px;
-	box-sizing: border-box;
-	width: 100%;
-	border: 1px solid #ccc;
-	outline: none;
+  font: inherit;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #ccc;
+  outline: none;
 }
 
 .Input input:focus {
-	outline: none;
-	background: #ccc;
+  outline: none;
+  background: #ccc;
 }
 
 .Input p {
-	color: red;
-	font-size: 14px;
-	padding: 5px 0px 5px 5px;
-	text-align: left;
-	margin: 0;
+  color: red;
+  font-size: 14px;
+  padding: 5px 0px 5px 5px;
+  text-align: left;
+  margin: 0;
 }
 
+.Submit {
+  color: #5c9210;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  background: none;
+  margin: 10px;
+  padding: 10px;
+}
+
+.Submit:disabled {
+  color: grey;
+}
 @media (min-width: 600px) {
-	.ContactData {
-		width: 500px;
-	}
+  .ContactData {
+    width: 500px;
+  }
 }
