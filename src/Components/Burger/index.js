@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "./index.module.css";
 
+import BuildControls from "./BuildControls";
 import BurgerIngredient from "./BurgerIngredients";
+import OrderSummary from "./OrderSummary";
 
 const Burger = props => {
 	let transformedIngredients = Object.keys(props.ingredients)
@@ -25,4 +27,4 @@ const Burger = props => {
 	);
 };
 
-export default Burger;
+export { BuildControls, BurgerIngredient, OrderSummary, Burger as default };

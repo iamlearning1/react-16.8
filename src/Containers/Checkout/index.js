@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
-import CheckoutSummary from "Components/Order/CheckoutSummary";
+import { CheckoutSummary } from "Components/Order";
 import ContactData from "Containers/Checkout/ContactData";
 
 class Checkout extends Component {

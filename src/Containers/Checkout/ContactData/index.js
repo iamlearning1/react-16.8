@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Button from "Components/UI/Button";
-import Spinner from "Components/UI/Spinner";
-import Input from "Components/UI/Input";
+import { Button, Input, Spinner } from "Components/UI";
 import styles from "./index.module.css";
 
 import axios from "api";

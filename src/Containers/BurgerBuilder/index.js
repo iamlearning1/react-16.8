@@ -2,11 +2,8 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import Burger from "Components/Burger";
-import BuildControls from "Components/Burger/BuildControls";
-import OrderSummary from "Components/Burger/OrderSummary";
-import Spinner from "Components/UI/Spinner";
-import Modal from "Components/UI/Modal";
+import Burger, { BuildControls, OrderSummary } from "Components/Burger";
+import { Spinner, Modal } from "Components/UI";
 import withErrorHandler from "hoc/withErrorHandler";
 import { ADD_INGREDIENT, REMOVE_INGREDIENT } from "store/actionTypes";
 
