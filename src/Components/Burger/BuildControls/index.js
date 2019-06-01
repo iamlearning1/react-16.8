@@ -1,39 +1,40 @@
-import React from 'react';
-import styles from './index.module.css';
+import React from "react";
+import styles from "./index.module.css";
 
-import BuildControl from './BuildControl';
+import BuildControl from "./BuildControl";
 
 const controls = [
-  { label: 'Salad', type: 'salad' },
-  { label: 'Bacon', type: 'bacon' },
-  { label: 'Cheese', type: 'cheese' },
-  { label: 'Meat', type: 'meat' }
+	{ label: "Salad", type: "salad" },
+	{ label: "Bacon", type: "bacon" },
+	{ label: "Cheese", type: "cheese" },
+	{ label: "Meat", type: "meat" }
 ];
 
 const BuildControls = props => {
-  return (
-    <div className={styles.BuildControls}>
-      <p>
-        <b>Current Price: {props.price.toFixed(2)}</b>
-      </p>
-      {controls.map(control => (
-        <BuildControl
-          label={control.label}
-          key={control.label}
-          type={control.type}
-          addIngredient={props.addIngredient}
-          removeIngredient={props.removeIngredient}
-        />
-      ))}
-      <button
-        className={styles.OrderButton}
-        disabled={!props.purchasable}
-        onClick={props.ordered}
-      >
-        ORDER NOW
-      </button>
-    </div>
-  );
+	return (
+		<div className={styles.BuildControls}>
+			<p>
+				<b>Current Price: {props.price.toFixed(2)}</b>
+			</p>
+			{controls.map(control => (
+				<BuildControl
+					label={control.label}
+					key={control.label}
+					type={control.type}
+					addIngredient={props.addIngredient}
+					removeIngredient={props.removeIngredient}
+					price={props.price}
+				/>
+			))}
+			<button
+				className={styles.OrderButton}
+				disabled={!(props.price > 4)}
+				onClick={props.ordered}
+			>
+				ORDER NOW
+			</button>
+		</div>
+	);
 };
 
 export default BuildControls;
