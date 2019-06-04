@@ -1,9 +1,11 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import burgerBuilderReducer from './burgerBuilderReducer';
+import burgerBuilderReducer from "./burgerBuilderReducer";
+import order from "./order";
 
 const reducer = combineReducers({
-  burgerBuilder: burgerBuilderReducer
+	burgerBuilder: burgerBuilderReducer,
+	order: order
 });
 
 export default reducer;
