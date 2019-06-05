@@ -47,7 +47,8 @@ export default (state = initialState, action) => {
 		case SET_INGREDIENTS:
 			return {
 				...state,
-				ingredients: action.ingredients
+				ingredients: action.ingredients,
+				totalPrice: 4
 			};
 
 		case SET_INGREDIENTS_FAILED:
