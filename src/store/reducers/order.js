@@ -1,11 +1,14 @@
 import {
 	PURCHASE_BURGER_FAIL,
-	PURCHASE_BURGER_SUCCESS
+	PURCHASE_BURGER_SUCCESS,
+	FETCH_ORDERS_SUCCESS,
+	FETCH_ORDERS_FAIL
 } from "../actions/actionTypes";
 
 const initialState = {
 	error: null,
-	id: null
+	id: null,
+	data: []
 };
 
 export default (state = initialState, action) => {
@@ -20,6 +23,18 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				error: "Something went wrong"
+			};
+
+		case FETCH_ORDERS_SUCCESS:
+			return {
+				...state,
+				data: action.data
+			};
+
+		case FETCH_ORDERS_FAIL:
+			return {
+				...state,
+				error: action.error
 			};
 
 		default:
