@@ -8,7 +8,7 @@ import { logout } from "store/actions";
 class Logout extends Component {
 	componentDidMount() {
 		this.props.logout();
-		this.props.history.replace("/auth");
+		this.props.history.replace("/");
 	}
 	render() {
 		return <Spinner />;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
 import "./App.css";
 
 import Layout from "Containers/Layout";
@@ -11,11 +12,14 @@ import Logout from "Containers/Auth/Logout";
 
 class App extends Component {
 	render() {
+		const { authData } = this.props;
 		return (
 			<Layout>
 				<Switch>
-					<Route path="/checkout" component={Checkout} />
-					<Route path="/orders" component={Orders} />
+					{authData && (
+						<Route path="/checkout" component={Checkout} />
+					)}
+					{authData && <Route path="/orders" component={Orders} />}
 					<Route path="/auth" component={Auth} />
 					<Route path="/logout" component={Logout} />
 					<Route path="/" component={BurgerBuilder} />
@@ -25,4 +29,8 @@ class App extends Component {
 	}
 }
 
-export default App;
+const mapStateToProps = state => ({
+	authData: state.auth.authData
+});
+
+export default connect(mapStateToProps)(App);

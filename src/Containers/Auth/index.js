@@ -120,30 +120,31 @@ class Auth extends Component {
 				touched={element.config.touched}
 			/>
 		));
-		const { loading, authData } = this.props;
-		let content = <Redirect to="/" />;
-		if (!authData) {
-			content = (
-				<div className={styles.Auth}>
-					<form onSubmit={this.onSubmitHandler}>
-						{form}
-						{loading ? (
-							<Spinner />
-						) : (
-							<Button
-								btnType="Success"
-								disabled={!this.state.formIsValid}
-							>
-								SUBMIT
-							</Button>
-						)}
-					</form>
-					<Button btnType="Danger" clicked={this.switchHandler}>
-						Switch to{" "}
-						{`${this.state.isSignUp ? "Sign-up" : "Sign-in"}`}
-					</Button>
-				</div>
-			);
+		const { loading, authData, building } = this.props;
+		let content = (
+			<div className={styles.Auth}>
+				<form onSubmit={this.onSubmitHandler}>
+					{form}
+					{loading ? (
+						<Spinner />
+					) : (
+						<Button
+							btnType="Success"
+							disabled={!this.state.formIsValid}
+						>
+							SUBMIT
+						</Button>
+					)}
+				</form>
+				<Button btnType="Danger" clicked={this.switchHandler}>
+					Switch to {this.state.isSignUp ? "Sign-up" : "Sign-in"}
+				</Button>
+			</div>
+		);
+		if (authData && !building) {
+			content = <Redirect to="/" />;
+		} else if (authData && building) {
+			content = <Redirect to="/checkout" />;
 		}
 		return content;
 	}
@@ -152,7 +153,8 @@ class Auth extends Component {
 const mapStateToProps = state => ({
 	authData: state.auth.authData,
 	error: state.auth.error,
-	loading: state.auth.loading
+	loading: state.auth.loading,
+	building: state.burgerBuilder.building
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import Order from "Components/Order";
-// import { Spinner } from "Components/UI";
+import { Spinner } from "Components/UI";
 
 import axios from "api";
 import withErrorHandler from "hoc/withErrorHandler";
@@ -17,7 +17,7 @@ class Orders extends Component {
 	}
 
 	render() {
-		const { orders, authData } = this.props;
+		const { orders } = this.props;
 		const orderList = orders.map(order => (
 			<Order
 				price={order.price}
@@ -25,24 +25,12 @@ class Orders extends Component {
 				key={order.id}
 			/>
 		));
-		return (
-			<div>
-				{authData ? (
-					orderList
-				) : (
-					<p>
-						You're not logged in. Please
-						<Link to="/auth">LOGIN</Link>
-					</p>
-				)}
-			</div>
-		);
+		return <div>{orders.length < 1 ? <Spinner /> : orderList}</div>;
 	}
 }
 
 const mapStateToProps = state => ({
-	orders: state.order.data,
-	authData: state.auth.authData
+	orders: state.order.data
 });
 
 const mapDispatchToProps = dispatch => ({

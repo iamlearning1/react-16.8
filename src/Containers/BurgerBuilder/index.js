@@ -32,9 +32,13 @@ class BurgerBuilder extends Component {
 	};
 
 	purchaseHandler = () => {
-		this.setState({
-			purchasing: true
-		});
+		if (this.props.authData) {
+			this.setState({
+				purchasing: true
+			});
+		} else {
+			this.props.history.push("/auth");
+		}
 	};
 
 	purchaseCancelHandler = () => {
@@ -47,7 +51,7 @@ class BurgerBuilder extends Component {
 
 	render() {
 		const { purchasing } = this.state;
-		const { ingredients, totalPrice, error } = this.props;
+		const { ingredients, totalPrice, error, authData } = this.props;
 		return (
 			<Fragment>
 				<Modal
@@ -61,18 +65,7 @@ class BurgerBuilder extends Component {
 				</Modal>
 				{error ? <p>{error}</p> : null}
 				{!ingredients ? (
-					<div
-						style={{
-							width: "100%",
-							margin: "0 auto",
-							display: "flex",
-							height: "100vh",
-							justifyContent: "center",
-							alignItems: "center"
-						}}
-					>
-						<Spinner />
-					</div>
+					<Spinner />
 				) : (
 					<Fragment>
 						<Burger ingredients={ingredients} />
@@ -81,6 +74,7 @@ class BurgerBuilder extends Component {
 							removeIngredient={this.removeIngredientHandler}
 							price={totalPrice}
 							ordered={this.purchaseHandler}
+							authData={authData}
 						/>
 					</Fragment>
 				)}
@@ -92,7 +86,8 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => ({
 	ingredients: state.burgerBuilder.ingredients,
 	totalPrice: state.burgerBuilder.totalPrice,
-	error: state.burgerBuilder.error
+	error: state.burgerBuilder.error,
+	authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
