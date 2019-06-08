@@ -25,12 +25,15 @@ const fetchOrdersFail = error => ({
 	error
 });
 
-export const purchaseBurger = orderData => async (dispatch, getState) => {
+export const purchaseBurger = (orderData, token) => async (
+	dispatch,
+	getState
+) => {
 	const {
 		burgerBuilder: { ingredients, totalPrice }
 	} = getState();
 	try {
-		const { data } = await axios.post("/orders.json", {
+		const { data } = await axios.post("/orders.json?auth=" + token, {
 			ingredients: ingredients,
 			price: parseFloat(totalPrice).toFixed(2),
 			orderData: orderData
@@ -41,10 +44,10 @@ export const purchaseBurger = orderData => async (dispatch, getState) => {
 	}
 };
 
-export const fetchOrders = () => async dispatch => {
+export const fetchOrders = token => async dispatch => {
 	try {
 		const dataArray = [];
-		const { data } = await axios.get("/orders.json");
+		const { data } = await axios.get("/orders.json?auth=" + token);
 		for (let i in data) {
 			dataArray.push({
 				...data[i],

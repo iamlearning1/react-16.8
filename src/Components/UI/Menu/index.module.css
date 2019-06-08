@@ -1,0 +1,18 @@
+.Menu {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.Menu div {
+	color: white;
+	border: 1px solid white;
+	width: 20px;
+	margin: 2px;
+}
+
+@media (min-width: 576px) {
+	.Menu {
+		display: none;
+	}
+}

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
 
 import Order from "Components/Order";
-import { Spinner } from "Components/UI";
+// import { Spinner } from "Components/UI";
 
 import axios from "api";
 import withErrorHandler from "hoc/withErrorHandler";
@@ -10,11 +11,13 @@ import { fetchOrders } from "store/actions/";
 
 class Orders extends Component {
 	componentDidMount() {
-		this.props.fetchOrders();
+		if (this.props.authData) {
+			this.props.fetchOrders(this.props.authData.idToken);
+		}
 	}
 
 	render() {
-		const { orders } = this.props;
+		const { orders, authData } = this.props;
 		const orderList = orders.map(order => (
 			<Order
 				price={order.price}
@@ -22,19 +25,31 @@ class Orders extends Component {
 				key={order.id}
 			/>
 		));
-		return <div>{orders.length < 1 ? <Spinner /> : orderList}</div>;
+		return (
+			<div>
+				{authData ? (
+					orderList
+				) : (
+					<p>
+						You're not logged in. Please
+						<Link to="/auth">LOGIN</Link>
+					</p>
+				)}
+			</div>
+		);
 	}
 }
 
 const mapStateToProps = state => ({
-	orders: state.order.data
+	orders: state.order.data,
+	authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
-	fetchOrders: () => dispatch(fetchOrders())
+	fetchOrders: token => dispatch(fetchOrders(token))
 });
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withErrorHandler(Orders, axios));
+)(withRouter(withErrorHandler(Orders, axios)));

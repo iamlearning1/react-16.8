@@ -117,7 +117,7 @@ class ContactData extends Component {
 		for (let i in this.state.orderForm) {
 			formData[i] = this.state.orderForm[i].value;
 		}
-		this.props.purchaseBurger(formData);
+		this.props.purchaseBurger(formData, this.props.authData.idToken);
 		this.props.history.push("/");
 	};
 
@@ -165,7 +165,7 @@ class ContactData extends Component {
 	};
 
 	render() {
-		const { id, error } = this.props;
+		const { id } = this.props;
 		return (
 			<div className={styles.ContactData}>
 				<h4>Enter your Contact Data</h4>
@@ -192,11 +192,12 @@ const mapStateToProps = state => ({
 	ingredients: state.burgerBuilder.ingredients,
 	totalPrice: state.burgerBuilder.totalPrice.toFixed(2),
 	error: state.order.error,
-	id: state.order.id
+	id: state.order.id,
+	authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
-	purchaseBurger: () => dispatch(purchaseBurger())
+	purchaseBurger: (data, token) => dispatch(purchaseBurger(data, token))
 });
 
 export default connect(

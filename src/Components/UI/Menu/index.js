@@ -1,37 +1,11 @@
-import React from 'react';
+import React from "react";
+
+import styles from "./index.module.css";
 
 export default props => (
-  <div
-    onClick={props.clicked}
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between'
-    }}
-  >
-    <div
-      style={{
-        color: 'white',
-        border: '1px solid white',
-        width: '20px',
-        margin: '2px'
-      }}
-    />
-    <div
-      style={{
-        color: 'white',
-        border: '1px solid white',
-        margin: '2px',
-        width: '20px'
-      }}
-    />
-    <div
-      style={{
-        color: 'white',
-        border: '1px solid white',
-        margin: '2px',
-        width: '20px'
-      }}
-    />
-  </div>
+	<div onClick={props.clicked} className={styles.Menu}>
+		<div />
+		<div />
+		<div />
+	</div>
 );

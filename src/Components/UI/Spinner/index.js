@@ -1,4 +1,4 @@
-import React from 'react';
-import styles from './index.module.css';
+import React from "react";
+import styles from "./index.module.css";
 
-export default props => <div className={styles.Loader} />;
+export default props => <div className={styles.Spinner} />;
