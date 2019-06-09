@@ -14,7 +14,7 @@ const SideDrawer = props => {
 	return (
 		<Fragment>
 			<Backdrop show={props.open} clicked={props.closed} />
-			<div className={attachedStyles.join(" ")}>
+			<div className={attachedStyles.join(" ")} onClick={props.closed}>
 				<Logo height="10%" />
 				<nav>
 					<NavigationItems isAuthenticated={props.isAuthenticated} />

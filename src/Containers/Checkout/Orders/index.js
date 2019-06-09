@@ -12,7 +12,7 @@ import { fetchOrders } from "store/actions/";
 class Orders extends Component {
 	componentDidMount() {
 		if (this.props.authData) {
-			this.props.fetchOrders(this.props.authData.idToken);
+			this.props.fetchOrders(this.props.authData.localId);
 		}
 	}
 
@@ -25,16 +25,32 @@ class Orders extends Component {
 				key={order.id}
 			/>
 		));
-		return <div>{orders.length < 1 ? <Spinner /> : orderList}</div>;
+		let orderData = <div>{!orders ? <Spinner /> : orderList}</div>;
+		if (orders.length < 1) {
+			orderData = (
+				<p
+					style={{
+						display: "block",
+						padding: "20px",
+						margin: "0 auto",
+						width: "100%"
+					}}
+				>
+					No orders placed yet
+				</p>
+			);
+		}
+		return orderData;
 	}
 }
 
 const mapStateToProps = state => ({
-	orders: state.order.data
+	orders: state.order.data,
+	authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
-	fetchOrders: token => dispatch(fetchOrders(token))
+	fetchOrders: userId => dispatch(fetchOrders(userId))
 });
 
 export default connect(

@@ -89,8 +89,12 @@ class Auth extends Component {
 
 	onSubmitHandler = event => {
 		event.preventDefault();
-		const { email, password, isSignUp } = this.state.orderForm;
-		this.props.authenticate(email.value, password.value, isSignUp);
+		const { email, password } = this.state.orderForm;
+		this.props.authenticate(
+			email.value,
+			password.value,
+			this.state.isSignUp
+		);
 	};
 
 	switchHandler = () => {

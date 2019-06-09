@@ -25,7 +25,7 @@ const fetchOrdersFail = error => ({
 	error
 });
 
-export const purchaseBurger = (orderData, token) => async (
+export const purchaseBurger = (orderData, userId) => async (
 	dispatch,
 	getState
 ) => {
@@ -33,21 +33,29 @@ export const purchaseBurger = (orderData, token) => async (
 		burgerBuilder: { ingredients, totalPrice }
 	} = getState();
 	try {
-		const { data } = await axios.post("/orders.json?auth=" + token, {
-			ingredients: ingredients,
-			price: parseFloat(totalPrice).toFixed(2),
-			orderData: orderData
-		});
+		const { data } = await axios.post(
+			"/orders.json?auth=" + JSON.parse(localStorage.getItem("token")),
+			{
+				ingredients: ingredients,
+				price: parseFloat(totalPrice).toFixed(2),
+				orderData: orderData,
+				userId
+			}
+		);
 		dispatch(purchaseBurgerSuccess(data.name));
 	} catch (error) {
 		purchaseBurgerFail(error);
 	}
 };
 
-export const fetchOrders = token => async dispatch => {
+export const fetchOrders = userId => async dispatch => {
 	try {
 		const dataArray = [];
-		const { data } = await axios.get("/orders.json?auth=" + token);
+		const queryParams = `&orderBy="userId"&equalTo="${userId}"`;
+		const token = JSON.parse(localStorage.getItem("token"));
+		const { data } = await axios.get(
+			`/orders.json?auth=${token}${queryParams}`
+		);
 		for (let i in data) {
 			dataArray.push({
 				...data[i],

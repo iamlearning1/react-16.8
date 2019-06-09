@@ -117,7 +117,7 @@ class ContactData extends Component {
 		for (let i in this.state.orderForm) {
 			formData[i] = this.state.orderForm[i].value;
 		}
-		this.props.purchaseBurger(formData, this.props.authData.idToken);
+		this.props.purchaseBurger(formData, this.props.authData.localId);
 		this.props.history.push("/");
 	};
 
@@ -197,7 +197,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	purchaseBurger: (data, token) => dispatch(purchaseBurger(data, token))
+	purchaseBurger: (data, userId) => dispatch(purchaseBurger(data, userId))
 });
 
 export default connect(

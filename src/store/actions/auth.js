@@ -11,19 +11,22 @@ const authStart = () => ({
 	type: AUTH_START
 });
 
-const authSuccess = payload => ({
-	type: AUTH_START_SUCCESS,
-	payload
-});
+const authSuccess = payload => {
+	return { type: AUTH_START_SUCCESS, payload };
+};
 
 const authFail = payload => ({
 	type: AUTH_START_FAIL,
 	payload
 });
 
-export const logout = () => ({
-	type: LOG_OUT
-});
+export const logout = () => {
+	localStorage.removeItem("token");
+	localStorage.removeItem("expirationDate");
+	return {
+		type: LOG_OUT
+	};
+};
 
 export const auth = (email, password, requestType) => async dispatch => {
 	dispatch(authStart());
@@ -33,19 +36,51 @@ export const auth = (email, password, requestType) => async dispatch => {
 			password,
 			returnSecureToken: true
 		};
-		let type;
-		if (requestType) {
-			type = "signupNewUser?key=";
+		let url;
+		if (!requestType) {
+			url =
+				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=";
 		} else {
-			type = "verifyPassword?key=";
+			url =
+				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=";
 		}
-		const { data } = await axios.post(
-			"https://www.googleapis.com/identitytoolkit/v3/relyingparty/" +
-				type +
-				"AIzaSyCGNFhLMT4LQYKlvzIq0f2WuiXzdmofvew",
-			body
+		const { data } = await axios.post(url, body);
+		const expirationDate = new Date(
+			new Date().getTime() + data.expiresIn * 1000
 		);
+		localStorage.setItem("token", JSON.stringify(data.idToken));
+		localStorage.setItem("expirationDate", JSON.stringify(expirationDate));
+
 		dispatch(authSuccess(data));
+	} catch (err) {
+		dispatch(authFail(err));
+	}
+};
+
+export const authStatus = () => async dispatch => {
+	try {
+		const token = JSON.parse(localStorage.getItem("token"));
+		const expirationDate = new Date(
+			JSON.parse(localStorage.getItem("expirationDate"))
+		).getTime();
+		const currentDate = new Date().getTime();
+		if (!token) {
+			dispatch(logout());
+		} else {
+			if (expirationDate <= currentDate) {
+				dispatch(logout());
+			} else {
+				const {
+					data: { users }
+				} = await axios.post(
+					"https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=",
+					{
+						idToken: token
+					}
+				);
+				dispatch(authSuccess(users[0]));
+			}
+		}
 	} catch (err) {
 		dispatch(authFail(err));
 	}
