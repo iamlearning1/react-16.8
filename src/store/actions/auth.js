@@ -39,10 +39,12 @@ export const auth = (email, password, requestType) => async dispatch => {
 		let url;
 		if (!requestType) {
 			url =
-				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=";
+				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" +
+				process.env.REACT_APP_API_KEY;
 		} else {
 			url =
-				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=";
+				"https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" +
+				process.env.REACT_APP_API_KEY;
 		}
 		const { data } = await axios.post(url, body);
 		const expirationDate = new Date(
@@ -73,7 +75,8 @@ export const authStatus = () => async dispatch => {
 				const {
 					data: { users }
 				} = await axios.post(
-					"https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=",
+					"https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=" +
+						process.env.REACT_APP_API_KEY,
 					{
 						idToken: token
 					}
