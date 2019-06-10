@@ -13,7 +13,7 @@ import {
 
 import axios from "api";
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
 	state = {
 		purchasing: false
 	};
