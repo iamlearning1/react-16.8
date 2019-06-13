@@ -1,4 +1,4 @@
-import { takeEvery } from "redux-saga/effects";
+import { takeEvery, all, takeLatest } from "redux-saga/effects";
 
 import {
 	INITIATE_LOG_OUT,
@@ -13,9 +13,11 @@ import { ingredients } from "./ingredients";
 import { fetchOrders, purchase } from "./order";
 
 export function* watchAuth() {
-	yield takeEvery(INITIATE_LOG_OUT, logout);
-	yield takeEvery(AUTH_INITIATE, authenticate);
-	yield takeEvery(CHECK_AUTH_STATUS, checkAuthStatus);
+	yield all([
+		takeEvery(INITIATE_LOG_OUT, logout),
+		takeEvery(AUTH_INITIATE, authenticate),
+		takeEvery(CHECK_AUTH_STATUS, checkAuthStatus)
+	]);
 }
 
 export function* loadIngredients() {
@@ -23,6 +25,6 @@ export function* loadIngredients() {
 }
 
 export function* orders() {
-	yield takeEvery(INIT_PURCHASE_BURGER, purchase);
+	yield takeLatest(INIT_PURCHASE_BURGER, purchase);
 	yield takeEvery(INIT_FETCH_ORDERS, fetchOrders);
 }

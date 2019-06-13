@@ -1,11 +1,11 @@
-import { put } from "redux-saga/effects";
+import { put, call } from "redux-saga/effects";
 import axios from "axios";
 
 import { logoutSuccess, authStart, authSuccess, authFail } from "store/actions";
 
 export function* logout(action) {
-	yield localStorage.removeItem("token");
-	yield localStorage.removeItem("expirationDate");
+	yield call([localStorage, "removeItem"], "token");
+	yield call([localStorage, "removeItem"], "expirationDate");
 	yield put(logoutSuccess());
 }
 
