@@ -1,8 +1,8 @@
 import {
 	ADD_INGREDIENT,
 	REMOVE_INGREDIENT,
-	SET_INGREDIENTS,
-	SET_INGREDIENTS_FAILED
+	SET_INGREDIENTS_FAILED,
+	SET_INGREDIENTS_SUCCESS
 } from "store/actions/actionTypes";
 
 const INGREDIENT_PRICES = {
@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
 				building: true
 			};
 
-		case SET_INGREDIENTS:
+		case SET_INGREDIENTS_SUCCESS:
 			return {
 				...state,
 				ingredients: action.ingredients,

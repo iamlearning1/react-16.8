@@ -3,11 +3,10 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 
 import reducer from "store/reducers";
-import { watchAuth } from "store/sagas";
+import { watchAuth, loadIngredients, orders } from "store/sagas";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -29,10 +28,12 @@ const composeEnhancers =
 		: null || compose;
 const store = createStore(
 	reducer,
-	composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
+	composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(loadIngredients);
+sagaMiddleware.run(orders);
 
 const app = (
 	<Provider store={store}>

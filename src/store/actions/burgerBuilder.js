@@ -1,10 +1,10 @@
 import {
 	ADD_INGREDIENT,
 	REMOVE_INGREDIENT,
-	SET_INGREDIENTS,
-	SET_INGREDIENTS_FAILED
+	SET_INGREDIENTS_SUCCESS,
+	SET_INGREDIENTS_FAILED,
+	INIT_INGREDIENTS
 } from "./actionTypes";
-import axios from "api";
 
 export const addIngredient = ingredientName => ({
 	type: ADD_INGREDIENT,
@@ -16,20 +16,15 @@ export const removeIngredient = ingredientName => ({
 	ingredientName
 });
 
-const setIngredients = ingredients => ({
-	type: SET_INGREDIENTS,
+export const setIngredients = ingredients => ({
+	type: SET_INGREDIENTS_SUCCESS,
 	ingredients
 });
 
-const setIngredientsFailed = () => ({
+export const setIngredientsFailed = () => ({
 	type: SET_INGREDIENTS_FAILED
 });
 
-export const initIngredients = () => async dispatch => {
-	try {
-		const { data } = await axios.get("ingredients.json");
-		dispatch(setIngredients(data));
-	} catch (error) {
-		dispatch(setIngredientsFailed());
-	}
-};
+export const initIngredients = () => ({
+	type: INIT_INGREDIENTS
+});

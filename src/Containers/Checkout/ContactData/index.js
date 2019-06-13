@@ -113,12 +113,19 @@ class ContactData extends Component {
 
 	orderHandler = async e => {
 		e.preventDefault();
+		const {
+			authData,
+			ingredients,
+			totalPrice,
+			history,
+			purchaseBurger
+		} = this.props;
 		const formData = {};
 		for (let i in this.state.orderForm) {
 			formData[i] = this.state.orderForm[i].value;
 		}
-		this.props.purchaseBurger(formData, this.props.authData.localId);
-		this.props.history.push("/");
+		purchaseBurger(formData, authData.localId, ingredients, totalPrice);
+		history.push("/");
 	};
 
 	inputChangedHandler = (event, inputIdentifier) => {
@@ -197,7 +204,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	purchaseBurger: (data, userId) => dispatch(purchaseBurger(data, userId))
+	purchaseBurger: (data, userId, ingredients, totalPrice) =>
+		dispatch(purchaseBurger(data, userId, ingredients, totalPrice))
 });
 
 export default connect(

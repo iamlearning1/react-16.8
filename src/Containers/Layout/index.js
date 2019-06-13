@@ -20,12 +20,10 @@ class Layout extends Component {
 		const { isAuthenticated } = this.props;
 		return (
 			<Fragment>
-				{isAuthenticated && (
-					<Toolbar
-						closed={this.sideDrawerClosedHandler}
-						isAuthenticated={isAuthenticated}
-					/>
-				)}
+				<Toolbar
+					closed={this.sideDrawerClosedHandler}
+					isAuthenticated={isAuthenticated}
+				/>
 				<SideDrawer
 					closed={this.sideDrawerClosedHandler}
 					open={this.state.showSideDrawer}

@@ -2,68 +2,39 @@ import {
 	PURCHASE_BURGER_SUCCESS,
 	PURCHASE_BURGER_FAIL,
 	FETCH_ORDERS_SUCCESS,
-	FETCH_ORDERS_FAIL
+	FETCH_ORDERS_FAIL,
+	INIT_FETCH_ORDERS,
+	INIT_PURCHASE_BURGER
 } from "./actionTypes";
-import axios from "api";
 
-const purchaseBurgerSuccess = id => ({
+export const purchaseBurgerSuccess = id => ({
 	type: PURCHASE_BURGER_SUCCESS,
 	id
 });
 
-const purchaseBurgerFail = () => ({
+export const purchaseBurgerFail = () => ({
 	type: PURCHASE_BURGER_FAIL
 });
 
-const fetchOrdersSuccess = data => ({
+export const fetchOrdersSuccess = data => ({
 	type: FETCH_ORDERS_SUCCESS,
 	data
 });
 
-const fetchOrdersFail = error => ({
+export const fetchOrdersFail = error => ({
 	type: FETCH_ORDERS_FAIL,
 	error
 });
 
-export const purchaseBurger = (orderData, userId) => async (
-	dispatch,
-	getState
-) => {
-	const {
-		burgerBuilder: { ingredients, totalPrice }
-	} = getState();
-	try {
-		const { data } = await axios.post(
-			"/orders.json?auth=" + JSON.parse(localStorage.getItem("token")),
-			{
-				ingredients: ingredients,
-				price: parseFloat(totalPrice).toFixed(2),
-				orderData: orderData,
-				userId
-			}
-		);
-		dispatch(purchaseBurgerSuccess(data.name));
-	} catch (error) {
-		purchaseBurgerFail(error);
-	}
-};
+export const purchaseBurger = (orderData, userId, ingredients, totalPrice) => ({
+	type: INIT_PURCHASE_BURGER,
+	orderData,
+	userId,
+	ingredients,
+	totalPrice
+});
 
-export const fetchOrders = userId => async dispatch => {
-	try {
-		const dataArray = [];
-		const queryParams = `&orderBy="userId"&equalTo="${userId}"`;
-		const token = JSON.parse(localStorage.getItem("token"));
-		const { data } = await axios.get(
-			`/orders.json?auth=${token}${queryParams}`
-		);
-		for (let i in data) {
-			dataArray.push({
-				...data[i],
-				id: i
-			});
-		}
-		dispatch(fetchOrdersSuccess(dataArray));
-	} catch (error) {
-		dispatch(fetchOrdersFail(error));
-	}
-};
+export const fetchOrders = userId => ({
+	type: INIT_FETCH_ORDERS,
+	userId
+});
