@@ -1,49 +1,42 @@
-import React, { Component, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from "react";
 
-import Modal from 'Components/UI/Modal';
+import Modal from "Components/UI/Modal";
 
 export default (WrappedComponent, axios) => {
-  return class extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        error: null
-      };
-      this.reqInterceptor = axios.interceptors.request.use(req => {
-        this.setState({ error: null });
-        return req;
-      });
-      this.resInterceptor = axios.interceptors.response.use(
-        res => res,
-        error => {
-          this.setState({ error });
-        }
-      );
-    }
+	return props => {
+		const [error, setError] = useState(null);
 
-    errorConfirmedHandler = () => {
-      this.setState({
-        error: null
-      });
-    };
+		const reqInterceptor = axios.interceptors.request.use(req => {
+			setError(null);
+			return req;
+		});
 
-    componentWillUnmount() {
-      axios.interceptors.request.eject(this.reqInterceptor);
-      axios.interceptors.response.eject(this.resInterceptor);
-    }
+		const resInterceptor = axios.interceptors.response.use(
+			res => res,
+			error => {
+				setError(error.message);
+			}
+		);
 
-    render() {
-      return (
-        <Fragment>
-          <Modal
-            show={this.state.error}
-            modalClosed={this.errorConfirmedHandler}
-          >
-            {this.state.error ? this.state.error.message : null}
-          </Modal>
-          <WrappedComponent {...this.props} />
-        </Fragment>
-      );
-    }
-  };
+		const errorConfirmedHandler = () => {
+			setError(null);
+		};
+
+		useEffect(
+			() => () => {
+				axios.interceptors.request.eject(reqInterceptor);
+				axios.interceptors.response.eject(resInterceptor);
+			},
+			[reqInterceptor, resInterceptor]
+		);
+
+		return (
+			<Fragment>
+				<Modal show={error} modalClosed={errorConfirmedHandler}>
+					{error ? error : null}
+				</Modal>
+				<WrappedComponent {...props} />
+			</Fragment>
+		);
+	};
 };

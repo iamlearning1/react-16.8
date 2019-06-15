@@ -1,37 +1,35 @@
-import React, { Component } from "react";
+import React from "react";
 import { withRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { CheckoutSummary } from "Components/Order";
 import ContactData from "Containers/Checkout/ContactData";
 
-class Checkout extends Component {
-	checkoutCancelledHandler = () => {
-		this.props.history.goBack();
+const Checkout = props => {
+	const checkoutCancelledHandler = () => {
+		props.history.goBack();
 	};
 
-	checkoutContinuedHandler = () => {
-		this.props.history.replace("/checkout/contact-data");
+	const checkoutContinuedHandler = () => {
+		props.history.replace("/checkout/contact-data");
 	};
 
-	render() {
-		return (
-			<div>
-				{this.props.ingredients && (
-					<CheckoutSummary
-						ingredients={this.props.ingredients}
-						checkoutCancelled={this.checkoutCancelledHandler}
-						checkoutContinued={this.checkoutContinuedHandler}
-					/>
-				)}
-				<Route
-					path={this.props.match.path + "/contact-data"}
-					render={props => <ContactData {...props} />}
+	return (
+		<div>
+			{props.ingredients && (
+				<CheckoutSummary
+					ingredients={props.ingredients}
+					checkoutCancelled={checkoutCancelledHandler}
+					checkoutContinued={checkoutContinuedHandler}
 				/>
-			</div>
-		);
-	}
-}
+			)}
+			<Route
+				path={props.match.path + "/contact-data"}
+				render={props => <ContactData {...props} />}
+			/>
+		</div>
+	);
+};
 
 const mapStateToProps = state => ({
 	ingredients: state.burgerBuilder.ingredients

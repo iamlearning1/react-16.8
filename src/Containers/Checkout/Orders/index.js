@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
@@ -9,40 +9,39 @@ import axios from "api";
 import withErrorHandler from "hoc/withErrorHandler";
 import { fetchOrders } from "store/actions/";
 
-class Orders extends Component {
-	componentDidMount() {
-		if (this.props.authData) {
-			this.props.fetchOrders(this.props.authData.localId);
-		}
-	}
+const Orders = props => {
+	const { orders, authData, fetchOrders } = props;
 
-	render() {
-		const { orders } = this.props;
-		const orderList = orders.map(order => (
-			<Order
-				price={order.price}
-				ingredients={order.ingredients}
-				key={order.id}
-			/>
-		));
-		let orderData = <div>{!orders ? <Spinner /> : orderList}</div>;
-		if (orders.length < 1) {
-			orderData = (
-				<p
-					style={{
-						display: "block",
-						padding: "20px",
-						margin: "0 auto",
-						width: "100%"
-					}}
-				>
-					No orders placed yet
-				</p>
-			);
+	useEffect(() => {
+		if (authData) {
+			fetchOrders(authData.localId);
 		}
-		return orderData;
+	}, [fetchOrders, authData]);
+
+	const orderList = orders.map(order => (
+		<Order
+			price={order.price}
+			ingredients={order.ingredients}
+			key={order.id}
+		/>
+	));
+	let orderData = <div>{!orders ? <Spinner /> : orderList}</div>;
+	if (orders.length < 1) {
+		orderData = (
+			<p
+				style={{
+					display: "block",
+					padding: "20px",
+					margin: "0 auto",
+					width: "100%"
+				}}
+			>
+				No orders placed yet
+			</p>
+		);
 	}
-}
+	return orderData;
+};
 
 const mapStateToProps = state => ({
 	orders: state.order.data,
